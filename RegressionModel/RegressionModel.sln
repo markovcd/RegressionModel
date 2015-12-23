@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegressionModel", "Regressi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTest", "..\IntegrationTest\IntegrationTest.csproj", "{801CAA7A-6795-48B1-BCD2-A7676B2B00E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomaticTest", "AutomaticTest\AutomaticTest.csproj", "{068E05CD-8790-452A-ABFB-F3620EC44F84}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomaticTest", "..\AutomaticTest\AutomaticTest.csproj", "{068E05CD-8790-452A-ABFB-F3620EC44F84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
