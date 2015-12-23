@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegressionModel", "RegressionModel.csproj", "{80E6F600-E0C5-492A-8AE3-D3BB8EFB017E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTest", "..\IntegrationTest\IntegrationTest.csproj", "{801CAA7A-6795-48B1-BCD2-A7676B2B00E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomaticTest", "AutomaticTest\AutomaticTest.csproj", "{068E05CD-8790-452A-ABFB-F3620EC44F84}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80E6F600-E0C5-492A-8AE3-D3BB8EFB017E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80E6F600-E0C5-492A-8AE3-D3BB8EFB017E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80E6F600-E0C5-492A-8AE3-D3BB8EFB017E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80E6F600-E0C5-492A-8AE3-D3BB8EFB017E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{801CAA7A-6795-48B1-BCD2-A7676B2B00E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{801CAA7A-6795-48B1-BCD2-A7676B2B00E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{801CAA7A-6795-48B1-BCD2-A7676B2B00E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{801CAA7A-6795-48B1-BCD2-A7676B2B00E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{068E05CD-8790-452A-ABFB-F3620EC44F84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{068E05CD-8790-452A-ABFB-F3620EC44F84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{068E05CD-8790-452A-ABFB-F3620EC44F84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{068E05CD-8790-452A-ABFB-F3620EC44F84}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
