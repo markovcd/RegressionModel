@@ -8,6 +8,7 @@ namespace Markovcd.Classes
 {
     public class Model : ModelBase
     {
+        public string FunctionText { get; }
         public LambdaExpression OriginalFunction { get; }
         public IReadOnlyList<LambdaExpression> SplitOriginalFunction { get; }
         public LambdaExpression Function { get; }
@@ -36,20 +37,46 @@ namespace Markovcd.Classes
             RSquared = CalculateRSquared(CompiledFunction, y, x);
         }
 
+        public Model(string func, IReadOnlyList<double> y, params IReadOnlyList<double>[] x)
+            : this(FunctionParser.ParseLambda(func, typeof(double)), y, x)
+        {
+            FunctionText = func;
+        }
+
         public double Calculate(params double[] x) 
             => Calculate(CompiledFunction, x);
 
         public override string ToString()
         {
+            var parameters = OriginalFunction.Parameters.Select(p => p.Name).Aggregate((s1, s2) => $"{s1}, {s2}");
+
+            var terms = SplitOriginalFunction.Select(f => f.Body.ToString())
+                                             .Select(FunctionParser.TrimParentheses)
+                                             .Select(s => new string(s.Where(c => !char.IsWhiteSpace(c)).ToArray()))
+                                             .ToArray();
+
+
+            var coeffs = Coefficients.Select((d, i) => $"b{i + 1} = {d}").Aggregate((s1, s2) => $"{s1}\n{s2}");
+            var b = Coefficients.Select((d, i) => $"b{i + 1}"); 
+
+            var originalFunc = terms.Zip(b, (s, d) => s.Equals("1") ? $"{d}" : $"{d}*{s}")
+                                    .Aggregate((s1, s2) => $"{s1} + {s2}");
+
+            var func = terms.Zip(Coefficients, (s, d) => s.Equals("1") ? $"{d:0.000}" : $"{d:0.000}*{s}")
+                            .Aggregate((s1, s2) => $"{s1} + {s2}");
+
             var sb = new StringBuilder();
 
-            var func = SplitOriginalFunction.Select(f => f.Body.ToString())
-                                            .Select(FunctionParser.TrimParentheses)
-                                            .Zip(Coefficients, (s, d) => s.Equals("1") ? $"{d:0.00}" : $"{d:0.00} * {s}")
-                                            .Aggregate((s1, s2) => $"{s1} + {s2}");
-            
-
-            sb.Append(func);
+            sb.AppendLine("Given function:");
+            sb.AppendLine($"f({parameters}) = {originalFunc}");
+            sb.AppendLine();
+            sb.AppendLine("Coefficients:");
+            sb.AppendLine(coeffs);
+            sb.AppendLine();
+            sb.AppendLine($"R squared: {RSquared}");
+            sb.AppendLine();
+            sb.AppendLine("Resulting function:");
+            sb.Append($"f({parameters}) = {func}");
 
             return sb.ToString();
         }

@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.CSharp;
-using System.CodeDom.Compiler;
 using System.Linq.Expressions;
-using JpLabs.DynamicCode;
-
+using Simpro.Expr;
 
 namespace Markovcd.Classes
 {
@@ -22,26 +16,20 @@ namespace Markovcd.Classes
             return func;
         }
 
-        // f(x,d,f) = x * d
-        public static string ParseFunctionType(string func, string type = "double")
+
+        public static string ParseToLambda(string func, Type type)
         {
-            var args = func.Split('=')[0].Split(new[] {',', '(', ')', ' '}, StringSplitOptions.RemoveEmptyEntries);
-            if (args[0].ToUpper() != "F") throw new InvalidOperationException();
-            var p = Enumerable.Repeat(type, args.Length).Aggregate((s1, s2) => s1 + ',' + s2);
-            return $"Func<{p}>";
+            var args = func.Split('=')[0]
+                           .Split(new[] {',', '(', ')', ' '}, StringSplitOptions.RemoveEmptyEntries)
+                           .Skip(1)
+                           .Select(s => $"{type.Name} {s}")
+                           .Aggregate((s1, s2) => $"{s1}, {s2}");
+
+            var body = func.Split('=')[1];
+            return $"({args}) => {body}";
         }
 
-        public static string ParseToLambda(string func)
-        {
-            var fIndex = func.IndexOfAny(new[] {'f', 'F'});
-            var lambda = func.Substring(fIndex + 1);
-            var equalIndex = func.IndexOf('=');
-            lambda = lambda.Substring(0, equalIndex) + '>' + lambda.Substring(equalIndex + 1);
-            return '(' + lambda + ')';
-        }
-
-        public static LambdaExpression ParseFunction(Compiler compiler, string func, string type = "double")
-            => compiler.ParseLambdaExpr(ParseToLambda(func), ParseFunctionType(func, type));
-        
+        public static LambdaExpression ParseLambda(string func, Type type) 
+            => new ExprParser().Parse(ParseToLambda(func, type));
     }
 }

@@ -40,20 +40,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExpressionParser\AnOperator.cs" />
+    <Compile Include="ExpressionParser\AToken.cs" />
+    <Compile Include="ExpressionParser\JumpInfo.cs" />
+    <Compile Include="ExpressionParser\ParseInfo.cs" />
+    <Compile Include="ExpressionParser\Misc.cs" />
+    <Compile Include="ExpressionParser\ExprParser.cs" />
+    <Compile Include="ExpressionParser\TokenStore.cs" />
+    <Compile Include="ExpressionParser\Using.cs" />
     <Compile Include="FunctionBuilder.cs" />
     <Compile Include="FunctionParser.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="MatrixHelper.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="ModelBase.cs" />
-    <Compile Include="ModelCompiler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Desktop\DynamicCode\JpLabs.DynamicCode.csproj">
-      <Project>{15c63d54-0d51-4812-8b8b-73ab72098800}</Project>
-      <Name>JpLabs.DynamicCode</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
