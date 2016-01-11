@@ -1,4 +1,6 @@
 ﻿
+using System.Text.RegularExpressions;
+
 namespace Markovcd.Classes
 {
     public class RightBracketToken : OperatorToken
@@ -11,8 +13,8 @@ namespace Markovcd.Classes
             : base(typeof(RightBracketToken).Name, ')', int.MaxValue, Associativity.Right)
         { }
 
-        public override Token MatchFromRule(int index, int length, string value)
-            => new RightBracketToken(index);
+        public override Token ToMatch(Match match)
+            => new RightBracketToken(match.Index);
 
         public static readonly RightBracketToken Default = new RightBracketToken();
     }

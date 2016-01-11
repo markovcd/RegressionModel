@@ -4,33 +4,21 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Markovcd.Classes
 {
-    public class NumberToken<T> : Token, IConstantExpressionConstructor where T : struct, IComparable, IFormattable, IConvertible, IComparable<T>, IEquatable<T>
+    public abstract class NumberToken<T> : Token, IExpressionConstructor where T : struct, IComparable, IFormattable, IConvertible, IComparable<T>, IEquatable<T>
     {
         public IFormatProvider FormatProvider { get; }
 
-        protected static T Parse(string value, IFormatProvider formatProvider = null)
-        {
-            var p = new List<object> {value, formatProvider ?? CultureInfo.InvariantCulture };
-
-            var parse = typeof (T).GetMethod("Parse", new[] {typeof (string), typeof(IFormatProvider)});
-            if (parse == null || !parse.IsStatic)
-            {
-                parse = typeof(T).GetMethod("Parse", new[] { typeof(string) });
-                p.RemoveAt(1);
-            }
-            if (parse == null || !parse.IsStatic) throw new InvalidOperationException();
-            
-            return (T) parse.Invoke(null, p.ToArray());
-        }
+        public abstract T Parse(string value, IFormatProvider formatProvider = null);
 
         private static string GroupName
             => typeof (NumberToken<T>).GetGenericArguments().First().Name + nameof(NumberToken<T>);
 
-        public ConstantExpression ConstructExpression
+        public Expression ConstructExpression
             => Expression.Constant(Parse(Value, FormatProvider));
 
         public NumberToken(int index, int length, T value, IFormatProvider formatProvider)
@@ -39,12 +27,11 @@ namespace Markovcd.Classes
             FormatProvider = formatProvider;
         }
 
-        public NumberToken(string rule)
+        public NumberToken(string rule, IFormatProvider formatProvider)
             : base(GroupName, rule)
-        { }
-
-        public override Token MatchFromRule(int index, int length, string value)
-            => new NumberToken<T>(index, length, Parse(value, FormatProvider), FormatProvider);
+        {
+            FormatProvider = formatProvider;
+        }       
     }
 
     public class DoubleNumberToken : NumberToken<double>
@@ -52,9 +39,14 @@ namespace Markovcd.Classes
         public DoubleNumberToken(int index, int length, double value)
             : base(index, length, value, CultureInfo.InvariantCulture) { }
         
-
         public DoubleNumberToken()
-            : base(@"([0-9]+\.?[0-9]*)|(\.[0-9]+)") { }
+            : base(@"([0-9]+\.?[0-9]*)|(\.[0-9]+)", CultureInfo.InvariantCulture) { }
+
+        public override double Parse(string value, IFormatProvider formatProvider = null)
+            => double.Parse(value, formatProvider);
+
+        public override Token ToMatch(Match match)
+            => new DoubleNumberToken(match.Index, match.Length, Parse(match.Value, FormatProvider));
 
         public static readonly DoubleNumberToken Default = new DoubleNumberToken();
     }

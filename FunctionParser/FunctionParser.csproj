@@ -40,8 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IParameterExpressionConstructor.cs" />
-    <Compile Include="Interfaces\IConstantExpressionConstructor.cs" />
+    <Compile Include="ExpressionConstructor.cs" />
+    <Compile Include="FunctionParser.cs" />
+    <Compile Include="Interfaces\IUnaryExpressionConstructor.cs" />
+    <Compile Include="Interfaces\IExpressionConstructor.cs" />
+    <Compile Include="Postfix.cs" />
     <Compile Include="Tokenizer.cs" />
     <Compile Include="ExtendedRegex.cs" />
     <Compile Include="Interfaces\IBinaryExpressionConstructor.cs" />
@@ -54,6 +57,7 @@
     <Compile Include="Tokens\LeftBracketToken.cs" />
     <Compile Include="Tokens\NamedToken.cs" />
     <Compile Include="Tokens\NumberToken.cs" />
+    <Compile Include="Tokens\ParameterSeparatorToken.cs" />
     <Compile Include="Tokens\ParameterToken.cs" />
     <Compile Include="Tokens\RightBracketToken.cs" />
     <Compile Include="Tokens\OperatorToken.cs" />

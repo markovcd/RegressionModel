@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 
 namespace Markovcd.Classes
 {
@@ -19,8 +20,8 @@ namespace Markovcd.Classes
             ConstructExpression = constructExpression;
         }
 
-        public override Token MatchFromRule(int index, int length, string value) 
-            => new BinaryOperatorToken(Name, index, value[0], Precedence, Associativity, ConstructExpression);
+        public override Token ToMatch(Match match) 
+            => new BinaryOperatorToken(Name, match.Index, match.Value[0], Precedence, Associativity, ConstructExpression);
 
         public static readonly BinaryOperatorToken Addition = new BinaryOperatorToken(nameof(Addition), '+', 0, Associativity.Left, Expression.Add);
         public static readonly BinaryOperatorToken Subtraction = new BinaryOperatorToken(nameof(Subtraction), '-', 0, Associativity.Left, Expression.Subtract);

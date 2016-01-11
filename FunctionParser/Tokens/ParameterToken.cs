@@ -4,11 +4,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Markovcd.Classes
 {
-    public class ParameterToken<T> : NamedToken, IParameterExpressionConstructor
+    public class ParameterToken<T> : NamedToken, IExpressionConstructor
     {
         public ParameterToken(string name)
             : base(name) { }
@@ -16,10 +17,10 @@ namespace Markovcd.Classes
         public ParameterToken(string name, int index)
             : base(name, index) { }
 
-        public override Token MatchFromRule(int index, int length, string value)
-            => new ParameterToken<T>(Name, index);
+        public override Token ToMatch(Match match)
+            => new ParameterToken<T>(Name, match.Index);
 
-        public ParameterExpression ConstructExpression 
+        public Expression ConstructExpression 
             => Expression.Parameter(typeof (T), Name);
     }
 }

@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Markovcd.Classes
 {
-    public interface IMethodExpressionConstructor
+    public interface IMethodExpressionConstructor : IMethodProvider
     {
         MethodCallExpression ConstructExpression(IEnumerable<Expression> arguments);
     }

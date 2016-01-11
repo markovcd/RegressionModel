@@ -27,8 +27,5 @@ namespace Markovcd.Classes
         {
             if (char.IsLetterOrDigit(rule)) throw new ArgumentException();
         }
-
-        public bool IsGreaterPrecedenceThan(IOperator o)
-            => Precedence > o.Precedence;
     }
 }

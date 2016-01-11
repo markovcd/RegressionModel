@@ -1,4 +1,6 @@
-﻿namespace Markovcd.Classes
+﻿using System.Text.RegularExpressions;
+
+namespace Markovcd.Classes
 {
     public abstract class Token
     {
@@ -25,7 +27,7 @@
         public virtual string ToRegularExpression()
             => $"(?<{Name}>{Rule})";
 
-        public abstract Token MatchFromRule(int index, int length, string value);
+        public abstract Token ToMatch(Match match);
 
         public override int GetHashCode()
             => $"token: {Name}".GetHashCode();

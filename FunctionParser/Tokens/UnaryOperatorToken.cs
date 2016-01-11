@@ -1,24 +1,26 @@
 ﻿using System;
+using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 
 namespace Markovcd.Classes
 {
-    public class UnaryOperatorToken<T, TResult> : OperatorToken
+    public class UnaryOperatorToken : OperatorToken, IUnaryExpressionConstructor
     {
-        public Func<T, TResult> Function { get; }
+        public Func<Expression, UnaryExpression> ConstructExpression { get; }   
 
-        public UnaryOperatorToken(string name, int index, char value, int precedence, Associativity associativity, Func<T, TResult> function)
+        public UnaryOperatorToken(string name, int index, char value, int precedence, Associativity associativity, Func<Expression, UnaryExpression> constructExpression)
             : base(name, index, value, precedence, associativity)
         {
-            Function = function;
+            ConstructExpression = constructExpression;
         }
 
-        public UnaryOperatorToken(string name, char rule, int precedence, Associativity associativity, Func<T, TResult> function)
+        public UnaryOperatorToken(string name, char rule, int precedence, Associativity associativity, Func<Expression, UnaryExpression> constructExpression)
            : base(name, rule, precedence, associativity)
         {
-            Function = function;
+            ConstructExpression = constructExpression;
         }
 
-        public override Token MatchFromRule(int index, int length, string value) 
-            => new UnaryOperatorToken<T, TResult>(Name, index, value[0], Precedence, Associativity, Function);
+        public override Token ToMatch(Match match)
+            => new UnaryOperatorToken(Name, match.Index, match.Value[0], Precedence, Associativity, ConstructExpression);
     }
 }

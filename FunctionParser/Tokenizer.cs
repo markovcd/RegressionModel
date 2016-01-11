@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
@@ -12,11 +13,11 @@ using System.Threading.Tasks;
 
 namespace Markovcd.Classes
 {
-    public class Tokenizer
+    public class Tokenizer : IEnumerable<Token>
     {
         private readonly ExtendedRegex regex;
+        private IEnumerable<Token> lastResult;
 
-        public IEnumerable<Token> LastResult { get; protected set; }
         public string LastExpression { get; protected set; }
         public IEnumerable<Token> Rules => rules.Values;
         public IEnumerable<ParameterToken<double>> Parameters => rules.Values.Where(t => t is ParameterToken<double>).Cast<ParameterToken<double>>();
@@ -32,52 +33,40 @@ namespace Markovcd.Classes
 
         public IEnumerable<Token> Tokenize(string expression)
         {
-            LastResult = regex.MatchesEx(expression)
-                              .Select(item => rules[item.Value].MatchFromRule(item.Key.Index, item.Key.Length, item.Key.Value))
-                              .ToList();
+            lastResult = regex.MatchesEx(expression)
+                              .Select(item => rules[item.Value].ToMatch(item.Key));
+
+            lastResult = IncludeUnknownTokens(expression, lastResult).ToList();
 
             LastExpression = expression;
-            return LastResult;
+            return lastResult;
         }
 
         private static IEnumerable<Token> IncludeUnknownTokens(string expression, IEnumerable<Token> tokens)
         {
-            var results = tokens.ToList();
-
             var lastIndex = 0;
 
-            foreach (var token in results)
+            foreach (var token in tokens)
             {
                 var gap = "";
 
-                if (token.Index <= lastIndex) 
+                if (token.Index > lastIndex) 
                     gap = expression.Substring(lastIndex, token.Index - lastIndex);
 
-                var gapIndex = 0;
-                var gapLength = 0;
+                var index = gap.Length - gap.TrimStart().Length + lastIndex;
+                gap = gap.Trim();
+                
+                if (gap != "") yield return new UnkownToken(index, gap.Length, gap);
 
-                for (var i = 0; i < gap.Length; i++)
-                {
-                    if (!char.IsWhiteSpace(gap[i])) continue;
-                    gapIndex = i + lastIndex;
-                    break;
-                }
-
-                for (var i = gap.Length - 1; i >= 0; i++)
-                {
-                    if (!char.IsWhiteSpace(gap[i])) continue;
-                    gapLength = i;
-                }
+                yield return token;
 
                 lastIndex = token.Index + token.Length;
             }
-
-            return results;
         }
 
         public static readonly IEnumerable<Token> DefaultTokens = new Token[]
         {
-            LeftBracketToken.Default, RightBracketToken.Default,
+            LeftBracketToken.Default, RightBracketToken.Default, ParameterSeparatorToken.Default,
             BinaryOperatorToken.Addition, BinaryOperatorToken.Subtraction,
             BinaryOperatorToken.Multiplication, BinaryOperatorToken.Division,
             BinaryOperatorToken.Power, DoubleNumberToken.Default,
@@ -89,6 +78,12 @@ namespace Markovcd.Classes
 
         public static Tokenizer Default(params string[] parameters)
             => new Tokenizer(DefaultTokens, parameters.Select(s => new ParameterToken<double>(s)));
+
+        public IEnumerator<Token> GetEnumerator() 
+            => lastResult.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() 
+            => GetEnumerator();
     }
 
     
