@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Markovcd.Classes
+namespace Markovcd.Interfaces
 {
     public interface IMethodExpressionConstructor : IMethodProvider
     {

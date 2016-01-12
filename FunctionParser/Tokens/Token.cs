@@ -24,7 +24,7 @@ namespace Markovcd.Classes
             Rule = rule;
         }
 
-        public virtual string ToRegularExpression()
+        public string ToRegularExpression()
             => $"(?<{Name}>{Rule})";
 
         public abstract Token ToMatch(Match match);

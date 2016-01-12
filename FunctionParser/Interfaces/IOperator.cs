@@ -1,5 +1,5 @@
 ﻿
-namespace Markovcd.Classes
+namespace Markovcd.Interfaces
 {
     public enum Associativity { None, Left, Right }
 

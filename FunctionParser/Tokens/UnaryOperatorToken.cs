@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
+using Markovcd.Interfaces;
 
 namespace Markovcd.Classes
 {
     public class UnaryOperatorToken : OperatorToken, IUnaryExpressionConstructor
     {
-        public Func<Expression, UnaryExpression> ConstructExpression { get; }   
+        public virtual Func<Expression, UnaryExpression> ConstructExpression { get; }   
 
         public UnaryOperatorToken(string name, int index, char value, int precedence, Associativity associativity, Func<Expression, UnaryExpression> constructExpression)
             : base(name, index, value, precedence, associativity)

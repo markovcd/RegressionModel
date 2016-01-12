@@ -1,5 +1,6 @@
 ﻿
 using System.Text.RegularExpressions;
+using Markovcd.Interfaces;
 
 namespace Markovcd.Classes
 {

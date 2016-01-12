@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
+using Markovcd.Interfaces;
 
 namespace Markovcd.Classes
 {
     public class BinaryOperatorToken : OperatorToken, IBinaryExpressionConstructor
     {
-        public Func<Expression, Expression, BinaryExpression> ConstructExpression { get; }
+        public virtual Func<Expression, Expression, BinaryExpression> ConstructExpression { get; }
 
         public BinaryOperatorToken(string name, int index, char value, int precedence, Associativity associativity, Func<Expression, Expression, BinaryExpression> constructExpression)
             : base(name, index, value, precedence, associativity)

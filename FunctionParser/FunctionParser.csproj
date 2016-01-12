@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="ExpressionConstructor.cs" />
     <Compile Include="FunctionParser.cs" />
+    <Compile Include="Interfaces\IParameterExpressionConstructor.cs" />
     <Compile Include="Interfaces\IUnaryExpressionConstructor.cs" />
     <Compile Include="Interfaces\IExpressionConstructor.cs" />
     <Compile Include="Postfix.cs" />

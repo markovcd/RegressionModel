@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Markovcd.Interfaces;
 
 namespace Markovcd.Classes
 {
@@ -18,7 +16,7 @@ namespace Markovcd.Classes
         private static string GroupName
             => typeof (NumberToken<T>).GetGenericArguments().First().Name + nameof(NumberToken<T>);
 
-        public Expression ConstructExpression
+        public virtual Expression ConstructExpression()
             => Expression.Constant(Parse(Value, FormatProvider));
 
         public NumberToken(int index, int length, T value, IFormatProvider formatProvider)

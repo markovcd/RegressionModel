@@ -4,10 +4,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Markovcd.Interfaces;
 
 namespace Markovcd.Classes
 {
-    public class FunctionToken : NamedToken, IMethodExpressionConstructor, IMethodProvider
+    public class FunctionToken : NamedToken, IMethodExpressionConstructor
     {
         public MethodInfo Function { get; }
         public int ParameterCount => Function.GetParameters().Length;

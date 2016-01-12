@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Markovcd.Interfaces;
 
 namespace Markovcd.Classes
 {
-    public class ParameterToken<T> : NamedToken, IExpressionConstructor
+    public class ParameterToken<T> : NamedToken, IParameterExpressionConstructor
     {
         public ParameterToken(string name)
             : base(name) { }
@@ -20,7 +18,10 @@ namespace Markovcd.Classes
         public override Token ToMatch(Match match)
             => new ParameterToken<T>(Name, match.Index);
 
-        public Expression ConstructExpression 
+        public virtual ParameterExpression ConstructExpression()
             => Expression.Parameter(typeof (T), Name);
+
+        public virtual ParameterExpression ConstructExpression(IEnumerable<ParameterExpression> parameters)
+            => parameters.Single(p => p.Name.Equals(Name, StringComparison.InvariantCultureIgnoreCase));
     }
 }

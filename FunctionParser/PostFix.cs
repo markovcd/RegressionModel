@@ -2,16 +2,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Markovcd.Interfaces;
 
 namespace Markovcd.Classes
 {
     public class Postfix : IEnumerable<Token>
     {
         private readonly IEnumerable<Token> lastResult;
+        private readonly Tokenizer tokenizer;
+
+        public IEnumerable<ParameterToken<double>> Parameters => tokenizer.Parameters; 
 
         public Postfix(Tokenizer tokens)
         {
             lastResult = FromInfix(tokens);
+            tokenizer = tokens;
         }
 
         public static IEnumerable<Token> FromInfix(IEnumerable<Token> tokens)

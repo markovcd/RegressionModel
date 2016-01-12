@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
 
-namespace Markovcd.Classes
+namespace Markovcd.Interfaces
 {
     public interface IExpressionConstructor
     {
-        Expression ConstructExpression { get; }
+        Expression ConstructExpression();
     }
 }
