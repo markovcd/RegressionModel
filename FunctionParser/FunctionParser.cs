@@ -53,7 +53,7 @@ namespace Markovcd.Classes
                 => new FunctionDefinitionToken(match.Index);
         }
 
-        private static void VerifyFunctionDefinition(IList<Token> tokens)
+        private static void AssertFunctionDefinition(IList<Token> tokens)
         {
             if (tokens.Count() < 3) throw new FormatException();
             if (!(tokens[0] is FunctionDefinitionToken)) throw new FormatException();
