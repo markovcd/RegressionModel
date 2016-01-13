@@ -11,7 +11,7 @@ namespace Markovcd.Classes
         public OperatorToken(string name, int index, char value, int precedence, Associativity associativity)
             : base(name, index, 1, value.ToString())
         {
-            AssertRule(value);
+            Assert(value);
             Precedence = precedence;
             Associativity = associativity;
         }
@@ -19,14 +19,14 @@ namespace Markovcd.Classes
         public OperatorToken(string name, char rule, int precedence, Associativity associativity)
             : base(name, $"\\{rule}")
         {
-            AssertRule(rule);
+            Assert(rule);
             Precedence = precedence;
             Associativity = associativity;
         }
 
-        private static void AssertRule(char rule)
+        private static void Assert(char name)
         {
-            if (char.IsLetterOrDigit(rule)) throw new ArgumentException();
+            if (char.IsLetterOrDigit(name)) throw new ArgumentException();
         }
     }
 }
