@@ -7,8 +7,7 @@ using System.Text;
 namespace Markovcd.Classes
 {
     public class Model : ModelBase
-    {
-        public string FunctionText { get; }
+    {      
         public LambdaExpression OriginalFunction { get; }
         public IReadOnlyList<LambdaExpression> SplitOriginalFunction { get; }
         public LambdaExpression Function { get; }
@@ -37,21 +36,24 @@ namespace Markovcd.Classes
             RSquared = CalculateRSquared(CompiledFunction, y, x);
         }
 
-        public Model(string func, IReadOnlyList<double> y, params IReadOnlyList<double>[] x)
-            : this(FunctionParser.ParseLambda(func, typeof(double)), y, x)
-        {
-            FunctionText = func;
-        }
-
         public double Calculate(params double[] x) 
             => Calculate(CompiledFunction, x);
+
+        private static string TrimParentheses(string func)
+        {
+            func = func.Trim();
+            if (func[0] == '(' && func[func.Length - 1] == ')')
+                func = func.Substring(1, func.Length - 2);
+
+            return func;
+        }
 
         public override string ToString()
         {
             var parameters = OriginalFunction.Parameters.Select(p => p.Name).Aggregate((s1, s2) => $"{s1}, {s2}");
 
             var terms = SplitOriginalFunction.Select(f => f.Body.ToString())
-                                             .Select(FunctionParser.TrimParentheses)
+                                             .Select(TrimParentheses)
                                              .Select(s => new string(s.Where(c => !char.IsWhiteSpace(c)).ToArray()))
                                              .ToArray();
 

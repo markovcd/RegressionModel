@@ -11,7 +11,7 @@ namespace Markovcd.Classes
         private readonly IEnumerable<Token> lastResult;
         private readonly Tokenizer tokenizer;
 
-        public IEnumerable<ParameterToken<double>> Parameters => tokenizer.Parameters; 
+        public IEnumerable<ParameterToken> Parameters => tokenizer.Parameters; 
 
         public Postfix(Tokenizer tokens)
         {
@@ -37,7 +37,7 @@ namespace Markovcd.Classes
         {
             if (token is FunctionToken || token is LeftBracketToken)
                 stack.Push(token);
-            else if (token is DoubleNumberToken || token is ParameterToken<double> || token is UnkownToken)
+            else if (token is DoubleNumberToken || token is ParameterToken || token is UnkownToken)
                 yield return token;
             else if (token is ParameterSeparatorToken)
                 foreach (var t in ProcessSeparator(stack))

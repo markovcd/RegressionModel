@@ -2,7 +2,7 @@
 
 namespace Markovcd.Classes
 {
-    public static class MatrixHelper
+    public abstract class MatrixBase
     {
         /*http://www.rkinteractive.com/blogs/SoftwareDevelopment/post/2013/05/07/Algorithms-In-C-LUP-Decomposition.aspx
         * Perform LUP decomposition on a matrix A.

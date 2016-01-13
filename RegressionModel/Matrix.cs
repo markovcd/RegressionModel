@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Markovcd.Classes
 {
-    public class Matrix
+    public class Matrix : MatrixBase
     {
         public Matrix(double[,] array)
         {
@@ -57,7 +55,7 @@ namespace Markovcd.Classes
             return result;
         }
 
-        public Matrix Invert() => new Matrix(MatrixHelper.Invert(Array));
+        public Matrix Invert() => new Matrix(Invert(Array));
         public bool CanMultiply(Matrix other) => Width == other.Height;
         public bool IsSameSize(Matrix other) => Height == other.Height && Width == other.Width;
         

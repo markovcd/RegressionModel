@@ -40,21 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExpressionParser\AnOperator.cs" />
-    <Compile Include="ExpressionParser\AToken.cs" />
-    <Compile Include="ExpressionParser\JumpInfo.cs" />
-    <Compile Include="ExpressionParser\ParseInfo.cs" />
-    <Compile Include="ExpressionParser\Misc.cs" />
-    <Compile Include="ExpressionParser\ExprParser.cs" />
-    <Compile Include="ExpressionParser\TokenStore.cs" />
-    <Compile Include="ExpressionParser\Using.cs" />
     <Compile Include="FunctionBuilder.cs" />
-    <Compile Include="FunctionParser.cs" />
     <Compile Include="Matrix.cs" />
-    <Compile Include="MatrixHelper.cs" />
+    <Compile Include="MatrixBase.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="ModelBase.cs" />
+    <Compile Include="ModelParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FunctionParser\FunctionParser.csproj">
+      <Project>{978097b6-a67d-4d2a-a369-efd5d7fa0ce5}</Project>
+      <Name>FunctionParser</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

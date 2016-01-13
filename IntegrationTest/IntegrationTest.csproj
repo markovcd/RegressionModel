@@ -50,6 +50,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FunctionParser\FunctionParser.csproj">
+      <Project>{978097b6-a67d-4d2a-a369-efd5d7fa0ce5}</Project>
+      <Name>FunctionParser</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RegressionModel\RegressionModel.csproj">
       <Project>{80e6f600-e0c5-492a-8ae3-d3bb8efb017e}</Project>
       <Name>RegressionModel</Name>

@@ -20,12 +20,12 @@ namespace Markovcd.Classes
 
         public string LastExpression { get; protected set; }
         public IEnumerable<Token> Rules => rules.Values;
-        public IEnumerable<ParameterToken<double>> Parameters => rules.Values.Where(t => t is ParameterToken<double>).Cast<ParameterToken<double>>();
+        public IEnumerable<ParameterToken> Parameters => rules.Values.Where(t => t is ParameterToken).Cast<ParameterToken>();
         private readonly Dictionary<string, Token> rules;  
 
-        public Tokenizer(IEnumerable<Token> rules, IEnumerable<ParameterToken<double>> parameters = null)
+        public Tokenizer(IEnumerable<Token> rules, IEnumerable<ParameterToken> parameters = null)
         {
-            parameters = parameters ?? Enumerable.Empty<ParameterToken<double>>();
+            parameters = parameters ?? Enumerable.Empty<ParameterToken>();
         
             this.rules = rules.Concat(parameters).ToDictionary(t => t.Name, t => t);;
             regex = new ExtendedRegex(Rules);
@@ -73,11 +73,11 @@ namespace Markovcd.Classes
             FunctionToken.Sin, FunctionToken.Cos, FunctionToken.Sqrt, FunctionToken.Tan
         };
 
-        public static Tokenizer Default(params ParameterToken<double>[] parameters) 
+        public static Tokenizer Default(params ParameterToken[] parameters) 
             => new Tokenizer(DefaultTokens, parameters);
 
         public static Tokenizer Default(params string[] parameters)
-            => new Tokenizer(DefaultTokens, parameters.Select(s => new ParameterToken<double>(s)));
+            => new Tokenizer(DefaultTokens, parameters.Select(s => new ParameterToken(s)));
 
         public IEnumerator<Token> GetEnumerator() 
             => lastResult.GetEnumerator();

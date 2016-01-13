@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Markovcd.Classes
 {
@@ -12,7 +10,7 @@ namespace Markovcd.Classes
     {
         public static LambdaExpression ParseExpression(string expression, IEnumerable<Token> rules, params string[] parameters)
         {
-            var tokenizer = new Tokenizer(rules, parameters.Select(s => new ParameterToken<double>(s)));
+            var tokenizer = new Tokenizer(rules, parameters.Select(s => new ParameterToken(s)));
             tokenizer.Tokenize(expression);
             var postfix = new Postfix(tokenizer);
             var constructor = new ExpressionConstructor(postfix);
