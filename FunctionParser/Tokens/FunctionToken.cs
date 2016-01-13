@@ -19,22 +19,13 @@ namespace Markovcd.Classes
         public FunctionToken(string name, int index, MethodInfo function)
             : base(name, index)
         {
-            AssertRule(name);
             Function = function;
         }
 
         public FunctionToken(string name, MethodInfo function)
             : base(name)
         {
-            AssertRule(name);
             Function = function;
-        }
-
-        private static void AssertRule(string name)
-        {
-            if (name == null) throw new ArgumentNullException(nameof(name));
-            if (!char.IsLetter(name[0])) throw new ArgumentException(nameof(name));
-            if (name.Skip(1).Any(c => (c != '_') && !char.IsLetterOrDigit(c))) throw new ArgumentException(nameof(name));
         }
 
         public override Token ToMatch(Match match) 
