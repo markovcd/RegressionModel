@@ -35,7 +35,7 @@ namespace Markovcd.Classes
             var rules = new Token[] { FunctionDefinitionToken.Default, LeftBracketToken.Default, RightBracketToken.Default, ParameterSeparatorToken.Default };
             var tokenizer = new Tokenizer(rules);
             var tokens = tokenizer.Tokenize(functionDef).ToList();
-            VerifyFunctionDefinition(tokens);
+            AssertFunctionDefinition(tokens);
             return tokens.Where(t => t is UnkownToken);
         }
 
