@@ -29,15 +29,15 @@ namespace Markovcd.Classes
             => new ConstantToken<T>(Name, match.Index, ConstantValue);
     }
 
-    public class DoubleNamedConstantToken : ConstantToken<double>
+    public class DoubleConstantToken : ConstantToken<double>
     {
-        public DoubleNamedConstantToken(string name, int index, double constantValue)
+        public DoubleConstantToken(string name, int index, double constantValue)
             : base(name, index, constantValue) { }
 
-        public DoubleNamedConstantToken(string name, double constantValue)
+        public DoubleConstantToken(string name, double constantValue)
             : base(name, constantValue) { }
 
-        public static readonly DoubleNamedConstantToken Pi = new DoubleNamedConstantToken(nameof(Pi), Math.PI);
-        public static readonly DoubleNamedConstantToken E = new DoubleNamedConstantToken(nameof(E), Math.E);
+        public static readonly DoubleConstantToken Pi = new DoubleConstantToken(nameof(Pi), Math.PI);
+        public static readonly DoubleConstantToken E = new DoubleConstantToken(nameof(E), Math.E);
     }
 }

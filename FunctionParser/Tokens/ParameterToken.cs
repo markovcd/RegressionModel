@@ -26,7 +26,7 @@ namespace Markovcd.Classes
         public override Token ToMatch(Match match)
             => new ParameterToken(Name, match.Index, Type);
 
-        public virtual ParameterExpression ConstructExpression()
+        public virtual Expression ConstructExpression()
             => Expression.Parameter(Type, Name);
 
         public virtual ParameterExpression ConstructExpression(IEnumerable<ParameterExpression> parameters)

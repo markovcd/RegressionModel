@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Markovcd.Classes
 {
@@ -66,11 +57,12 @@ namespace Markovcd.Classes
 
         public static readonly IEnumerable<Token> DefaultTokens = new Token[]
         {
-            LeftBracketToken.Default, RightBracketToken.Default, ParameterSeparatorToken.Default,
+            LeftBracketToken.Default, RightBracketToken.Default, ArgumentSeparatorToken.Default,
             BinaryOperatorToken.Addition, BinaryOperatorToken.Subtraction,
             BinaryOperatorToken.Multiplication, BinaryOperatorToken.Division,
-            BinaryOperatorToken.Power, DoubleNumberToken.Default,
-            FunctionToken.Sin, FunctionToken.Cos, FunctionToken.Sqrt, FunctionToken.Tan
+            BinaryOperatorToken.Power, DoubleLiteralToken.Default,
+            FunctionToken.Sin, FunctionToken.Cos, FunctionToken.Sqrt, FunctionToken.Tan,
+            DoubleConstantToken.E, DoubleConstantToken.Pi, 
         };
 
         public static Tokenizer Default(params ParameterToken[] parameters) 

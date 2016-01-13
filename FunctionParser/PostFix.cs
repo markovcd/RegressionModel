@@ -37,9 +37,9 @@ namespace Markovcd.Classes
         {
             if (token is FunctionToken || token is LeftBracketToken)
                 stack.Push(token);
-            else if (token is DoubleNumberToken || token is ParameterToken || token is UnkownToken)
+            else if (token is IConstant<double> || token is ParameterToken || token is UnkownToken)
                 yield return token;
-            else if (token is ParameterSeparatorToken)
+            else if (token is ArgumentSeparatorToken)
                 foreach (var t in ProcessSeparator(stack))
                     yield return t;
             else if (token is BinaryOperatorToken)

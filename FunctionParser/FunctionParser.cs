@@ -32,7 +32,7 @@ namespace Markovcd.Classes
         // format: f(parameter1, parameter2, ..., parameterN)
         public static IEnumerable<Token> ParseFunctionDefinition(string functionDef)
         {
-            var rules = new Token[] { FunctionDefinitionToken.Default, LeftBracketToken.Default, RightBracketToken.Default, ParameterSeparatorToken.Default };
+            var rules = new Token[] { FunctionDefinitionToken.Default, LeftBracketToken.Default, RightBracketToken.Default, ArgumentSeparatorToken.Default };
             var tokenizer = new Tokenizer(rules);
             var tokens = tokenizer.Tokenize(functionDef).ToList();
             Assert(tokens);
@@ -63,7 +63,7 @@ namespace Markovcd.Classes
             {
                 if (!(tokens[i] is UnkownToken)) throw new FormatException();
                 if (i == tokens.Count - 2 && !(tokens[i + 1] is RightBracketToken)) throw new FormatException();
-                if (i < tokens.Count - 2 && !(tokens[i + 1] is ParameterSeparatorToken)) throw new FormatException();
+                if (i < tokens.Count - 2 && !(tokens[i + 1] is ArgumentSeparatorToken)) throw new FormatException();
             }
 
             

@@ -13,7 +13,10 @@ namespace Markovcd.Classes
 
         public ExpressionConstructor(Postfix postfix)
         {
-            Parameters = postfix.Parameters.Select(p => p.ConstructExpression()).ToList();
+            Parameters = postfix.Parameters.Select(p => p.ConstructExpression())
+                                           .Cast<ParameterExpression>()
+                                           .ToList();
+
             var body = FromPostfix(postfix, Parameters);
             LambdaExpression = Expression.Lambda(body, Parameters);
         }
@@ -24,27 +27,8 @@ namespace Markovcd.Classes
 
             foreach (var token in postfix)
             {
-                if (token is IParameterExpressionConstructor)
-                {
-                    var token2 = token as IParameterExpressionConstructor;
-                    stack.Push(parameters == null ? token2.ConstructExpression() : token2.ConstructExpression(parameters));
-                }
-                else if (token is IExpressionConstructor)
-                    stack.Push((token as IExpressionConstructor).ConstructExpression());
-                else if (token is IBinaryExpressionConstructor)
-                {
-                    var args = PopArguments(stack, 2);
-                    stack.Push((token as IBinaryExpressionConstructor).ConstructExpression(args[0], args[1]));
-                }
-                else if (token is IMethodExpressionConstructor)
-                {
-                    var argCount = (token as IMethodExpressionConstructor).ParameterCount;
-                    stack.Push((token as IMethodExpressionConstructor).ConstructExpression(PopArguments(stack, argCount)));
-                }
-                else if (token is UnkownToken)
-                    throw new InvalidOperationException($"Invalid token: \"{token.Value}\"");
-                else
-                    throw new InvalidOperationException();
+                var expression = ConstructExpression(stack, token, parameters);
+                stack.Push(expression);
             }
 
             var result = stack.Pop();
@@ -54,10 +38,40 @@ namespace Markovcd.Classes
             return result;
         }
 
+        private static Expression ConstructExpression(Stack<Expression> stack, Token token, IEnumerable<ParameterExpression> parameters = null)
+        {
+            Expression expression;
+
+            var parameter = token as IParameterExpressionConstructor;
+            var other = token as IExpressionConstructor;
+            var binary = token as IBinaryExpressionConstructor;
+            var method = token as IMethodExpressionConstructor;
+
+            if (parameter != null)
+                expression = parameters == null ? parameter.ConstructExpression() : parameter.ConstructExpression(parameters);
+            else if (binary != null)
+            {
+                var args = PopArguments(stack, 2);
+                expression = binary.ConstructExpression(args[0], args[1]);
+            }
+            else if (method != null)
+            {
+                var args = PopArguments(stack, method.ParameterCount);
+                expression = method.ConstructExpression(args);
+            }
+            else if (other != null)
+                expression = other.ConstructExpression();
+            else if (token is UnkownToken)
+                throw new InvalidOperationException($"Invalid token: \"{token.Value}\"");
+            else
+                throw new InvalidOperationException();
+
+            return expression;
+        }
+
         private static IList<T> PopArguments<T>(Stack<T> stack, int count)
         {
             var args = new List<T>();
-
             while (count-- > 0) args.Insert(0, stack.Pop());
             return args;
         } 

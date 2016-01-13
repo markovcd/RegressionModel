@@ -7,7 +7,7 @@ using Markovcd.Interfaces;
 
 namespace Markovcd.Classes
 {
-    public class LiteralToken<T> : Token, IExpressionConstructor
+    public class LiteralToken<T> : Token, IExpressionConstructor, IConstant<T>
         where T : struct, IComparable, IFormattable, IConvertible, IComparable<T>, IEquatable<T>
     {
         public IFormatProvider FormatProvider { get; }
@@ -41,18 +41,18 @@ namespace Markovcd.Classes
             => typeof (T).Name + nameof(LiteralToken<T>);
     }
 
-    public class DoubleConstantToken : LiteralToken<double>
+    public class DoubleLiteralToken : LiteralToken<double>
     {
         internal static readonly CultureInfo CultureInfo = CultureInfo.InvariantCulture;
         internal static readonly string Format = @"([0-9]+\.?[0-9]*)|(\.[0-9]+)";
 
-        public DoubleConstantToken(int index, int length, double value)
+        public DoubleLiteralToken(int index, int length, double value)
             : base(index, length, value, CultureInfo, double.Parse) { }
         
-        public DoubleConstantToken()
+        public DoubleLiteralToken()
             : base(Format, CultureInfo, double.Parse) { }
 
-        public static readonly DoubleConstantToken Default = new DoubleConstantToken();
+        public static readonly DoubleLiteralToken Default = new DoubleLiteralToken();
     }
 
     

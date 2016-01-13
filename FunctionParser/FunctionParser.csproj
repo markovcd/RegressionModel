@@ -60,7 +60,7 @@
     <Compile Include="Tokens\LeftBracketToken.cs" />
     <Compile Include="Tokens\NamedToken.cs" />
     <Compile Include="Tokens\LiteralToken.cs" />
-    <Compile Include="Tokens\ParameterSeparatorToken.cs" />
+    <Compile Include="Tokens\ArgumentSeparatorToken.cs" />
     <Compile Include="Tokens\ParameterToken.cs" />
     <Compile Include="Tokens\RightBracketToken.cs" />
     <Compile Include="Tokens\OperatorToken.cs" />

@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Markovcd.Interfaces
 {
-    public interface IParameterExpressionConstructor
+    public interface IParameterExpressionConstructor : IExpressionConstructor
     {
         ParameterExpression ConstructExpression(IEnumerable<ParameterExpression> expressions);
-        ParameterExpression ConstructExpression();
     }
 }
