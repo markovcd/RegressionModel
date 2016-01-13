@@ -35,7 +35,7 @@ namespace Markovcd.Classes
             var rules = new Token[] { FunctionDefinitionToken.Default, LeftBracketToken.Default, RightBracketToken.Default, ParameterSeparatorToken.Default };
             var tokenizer = new Tokenizer(rules);
             var tokens = tokenizer.Tokenize(functionDef).ToList();
-            AssertFunctionDefinition(tokens);
+            Assert(tokens);
             return tokens.Where(t => t is UnkownToken);
         }
 
@@ -53,7 +53,7 @@ namespace Markovcd.Classes
                 => new FunctionDefinitionToken(match.Index);
         }
 
-        private static void AssertFunctionDefinition(IList<Token> tokens)
+        private static void Assert(IList<Token> tokens)
         {
             if (tokens.Count() < 3) throw new FormatException();
             if (!(tokens[0] is FunctionDefinitionToken)) throw new FormatException();

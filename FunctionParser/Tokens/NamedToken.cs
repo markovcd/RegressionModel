@@ -1,4 +1,7 @@
 ﻿
+using System;
+using System.Linq;
+
 namespace Markovcd.Classes
 {
     public abstract class NamedToken : Token
