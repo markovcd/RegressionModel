@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="ExpressionConstructor.cs" />
     <Compile Include="FunctionParser.cs" />
+    <Compile Include="Interfaces\IConstant.cs" />
     <Compile Include="Interfaces\IParameterExpressionConstructor.cs" />
     <Compile Include="Interfaces\IUnaryExpressionConstructor.cs" />
     <Compile Include="Interfaces\IExpressionConstructor.cs" />
@@ -54,11 +55,11 @@
     <Compile Include="Interfaces\IOperator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tokens\BinaryOperatorToken.cs" />
-    <Compile Include="Tokens\NamedConstantToken.cs" />
+    <Compile Include="Tokens\ConstantToken.cs" />
     <Compile Include="Tokens\FunctionToken.cs" />
     <Compile Include="Tokens\LeftBracketToken.cs" />
     <Compile Include="Tokens\NamedToken.cs" />
-    <Compile Include="Tokens\ConstantToken.cs" />
+    <Compile Include="Tokens\LiteralToken.cs" />
     <Compile Include="Tokens\ParameterSeparatorToken.cs" />
     <Compile Include="Tokens\ParameterToken.cs" />
     <Compile Include="Tokens\RightBracketToken.cs" />
