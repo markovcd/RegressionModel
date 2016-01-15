@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq.Expressions;
+using System.Runtime.InteropServices;
 using Markovcd.Classes;
 
 namespace Markovcd
@@ -32,12 +34,17 @@ namespace Markovcd
             };
             
             
-            var funcStr = "f(x1, x2) = x1 + x2 + x1^2 + x2^2 + x1*x2 + Sin(x1)";
-            var model = new ModelParser(funcStr, y, p1, p2);
+            //var funcStr = "f(x1, x2) = x1 + x2 + x1^2 + x2^2 + x1*x2 + Sin(x1)";
+            //var model = new ModelParser(funcStr, y, p1, p2);
+            var model =
+                Model.Two((x1, x2) => x1 + x2 + x1*x1 + x2*x2 + x1*x2 + Math.Sin(x1), y,
+                    p1, p2);
 
-            Console.WriteLine(model);
+             Console.WriteLine(model);
 
             Console.ReadLine();
+
+         
         }
     }
 }

@@ -6,6 +6,67 @@ using System.Text;
 
 namespace Markovcd.Classes
 {
+    public class Model<T, TResult> : Model<Func<T, TResult>>
+        where T : struct, IComparable, IFormattable, IConvertible, IComparable<T>, IEquatable<T>
+        where TResult : struct, IComparable, IFormattable, IConvertible, IComparable<TResult>, IEquatable<TResult>
+    {
+        public Model(Expression<Func<T, TResult>> func, IReadOnlyList<double> y, IReadOnlyList<double> x)
+            : base(func, y, x) { }
+    }
+
+    public class Model<T1, T2, TResult> : Model<Func<T1, T2, TResult>>
+        where T1 : struct, IComparable, IFormattable, IConvertible, IComparable<T1>, IEquatable<T1>
+        where T2 : struct, IComparable, IFormattable, IConvertible, IComparable<T2>, IEquatable<T2>
+        where TResult : struct, IComparable, IFormattable, IConvertible, IComparable<TResult>, IEquatable<TResult>
+    {
+        public Model(Expression<Func<T1, T2, TResult>> func, IReadOnlyList<double> y, IReadOnlyList<double> x1,
+            IReadOnlyList<double> x2)
+            : base(func, y, x1, x2) { }
+    }
+
+    public class Model<T1, T2, T3, TResult> : Model<Func<T1, T2, T3, TResult>>
+        where T1 : struct, IComparable, IFormattable, IConvertible, IComparable<T1>, IEquatable<T1>
+        where T2 : struct, IComparable, IFormattable, IConvertible, IComparable<T2>, IEquatable<T2>
+        where T3 : struct, IComparable, IFormattable, IConvertible, IComparable<T3>, IEquatable<T3>
+        where TResult : struct, IComparable, IFormattable, IConvertible, IComparable<TResult>, IEquatable<TResult>
+    {
+        public Model(Expression<Func<T1, T2, T3, TResult>> func, IReadOnlyList<double> y, IReadOnlyList<double> x1,
+            IReadOnlyList<double> x2, IReadOnlyList<double> x3)
+            : base(func, y, x1, x2, x3) { }
+    }
+
+    public class Model<T1, T2, T3, T4, TResult> : Model<Func<T1, T2, T3, T4, TResult>>
+        where T1 : struct, IComparable, IFormattable, IConvertible, IComparable<T1>, IEquatable<T1>
+        where T2 : struct, IComparable, IFormattable, IConvertible, IComparable<T2>, IEquatable<T2>
+        where T3 : struct, IComparable, IFormattable, IConvertible, IComparable<T3>, IEquatable<T3>
+        where T4 : struct, IComparable, IFormattable, IConvertible, IComparable<T4>, IEquatable<T4>
+        where TResult : struct, IComparable, IFormattable, IConvertible, IComparable<TResult>, IEquatable<TResult>
+    {
+        public Model(Expression<Func<T1, T2, T3, T4, TResult>> func, IReadOnlyList<double> y, IReadOnlyList<double> x1,
+            IReadOnlyList<double> x2, IReadOnlyList<double> x3, IReadOnlyList<double> x4)
+            : base(func, y, x1, x2, x3, x4) { }
+    }
+
+    public class Model<TFunc> : Model where TFunc : class
+    {
+        public new Expression<TFunc> OriginalFunction 
+            => (Expression<TFunc>)base.OriginalFunction;
+
+        public new IReadOnlyList<Expression<TFunc>> SplitOriginalFunction
+            => base.SplitOriginalFunction.Cast<Expression<TFunc>>().ToList();
+
+        public new Expression<TFunc> Function
+            => (Expression<TFunc>)base.Function;
+
+        public new IReadOnlyList<Expression<TFunc>> SplitFunction
+            => base.SplitFunction.Cast<Expression<TFunc>>().ToList();
+
+        public new TFunc CompiledFunction => (TFunc)(object)base.CompiledFunction;
+
+        public Model(Expression<TFunc> func, IReadOnlyList<double> y, params IReadOnlyList<double>[] x)
+            : base(func, y, x) { }
+    }
+
     public class Model : ModelBase
     {      
         public LambdaExpression OriginalFunction { get; }
@@ -22,6 +83,8 @@ namespace Markovcd.Classes
 
         public Model(LambdaExpression func, IReadOnlyList<double> y, params IReadOnlyList<double>[] x)
         {
+            Assert(func.Type);
+
             X = x;
             Y = y;
             ParameterCount = x.Length;
@@ -29,7 +92,6 @@ namespace Markovcd.Classes
             SplitOriginalFunction = SplitAndCheckLambda(OriginalFunction).ToList();
             Function = func.ToParams<double>();
             SplitFunction = SplitAndCheckLambda(Function).ToList();
-            
             Coefficients = GetCoefficients(SplitFunction, y, x);
             
             CompiledFunction = Compile(SplitFunction, Coefficients);
@@ -82,6 +144,35 @@ namespace Markovcd.Classes
 
             return sb.ToString();
         }
+
+        private static void Assert(Type type)
+        {
+            var doubl = typeof(double);
+
+            if (!type.IsSubclassOf(typeof(Delegate)) || !type.Name.Contains("Func`"))
+                throw new InvalidOperationException(type.Name + " is not a Func<> type");
+
+            if (type.GetGenericArguments().Any(t => !t.Equals(doubl)))
+                throw new ArgumentException("Generic arguments should be of type double.");
+        }
+
+        public static Model<double, double> One(Expression<Func<double, double>> func,
+            IReadOnlyList<double> y, IReadOnlyList<double> x)
+            => new Model<double, double>(func, y, x);
+
+        public static Model<double, double, double> Two(Expression<Func<double, double, double>> func,
+            IReadOnlyList<double> y, IReadOnlyList<double> x1, IReadOnlyList<double> x2)
+            => new Model<double, double, double>(func, y, x1, x2);
+
+        public static Model<double, double, double, double> Three(Expression<Func<double, double, double, double>> func,
+            IReadOnlyList<double> y, IReadOnlyList<double> x1, IReadOnlyList<double> x2, IReadOnlyList<double> x3)
+            => new Model<double, double, double, double>(func, y, x1, x2, x3);
+
+        public static Model<double, double, double, double, double> Four(
+            Expression<Func<double, double, double, double, double>> func,
+            IReadOnlyList<double> y, IReadOnlyList<double> x1, IReadOnlyList<double> x2, IReadOnlyList<double> x3,
+            IReadOnlyList<double> x4)
+            => new Model<double, double, double, double, double>(func, y, x1, x2, x3, x4);
     }
 
 
