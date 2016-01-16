@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using Markovcd.Classes;
@@ -8,8 +10,16 @@ namespace Markovcd.Classes
 {
     public class ModelBase
     {
-        private static double ResidualSumOfSquares(Delegate func, IEnumerable<double> y, params IReadOnlyList<double>[] x)
+       
+        private static double ResidualSumOfSquares(Delegate func, IEnumerable<double> y, params IReadOnlyList<double>[][] x)
             => y.Select((t, i) => Math.Pow(t - (double)func.DynamicInvoke(x.Select(p => p[i]).ToArray()), 2)).Sum();
+
+        private static double TotalSumOfSquares<T>(IEnumerable<T> y, IFormatProvider formatProvider = null)
+            where T : IConvertible
+        {
+            formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
+            return TotalSumOfSquares(y.Select(item => item.ToDouble(formatProvider)).ToList());
+        }
 
         private static double TotalSumOfSquares(IReadOnlyCollection<double> y)
         {
@@ -20,24 +30,23 @@ namespace Markovcd.Classes
         public static double CalculateRSquared(Delegate func, IReadOnlyList<double> y, params IReadOnlyList<double>[] x)
             => 1 - ResidualSumOfSquares(func, y, x) / TotalSumOfSquares(y);
 
-        public static Delegate Compile(LambdaExpression func, IEnumerable<double> coefficients)
-            => Compile(SplitAndCheckLambda(func), coefficients);
+        public static LambdaExpression JoinFunction(LambdaExpression func, IEnumerable<double> coefficients)
+            => JoinFunction(SplitAndCheckLambda(func), coefficients);
 
-        protected static Delegate Compile(IEnumerable<LambdaExpression> func, IEnumerable<double> coefficients)
+        protected static LambdaExpression JoinFunction(IEnumerable<LambdaExpression> func, IEnumerable<double> coefficients)
             => func.Zip(coefficients, (f, d) =>
                        Expression.Lambda(
                            Expression.Multiply(f.Body,
                                Expression.Constant(d)), f.Parameters))
                    .Aggregate((total, curr) =>
                        Expression.Lambda(
-                           Expression.Add(total.Body, curr.Body), total.Parameters))
-                   .Compile();
+                           Expression.Add(total.Body, curr.Body), total.Parameters));
 
         public static double Calculate(Delegate func, params double[] x)
             => (double)func.DynamicInvoke(x);
 
         private static double Calculate(IEnumerable<LambdaExpression> func, IEnumerable<double> coefficients, params double[] x)
-            => Calculate(Compile(func, coefficients), x);
+            => Calculate(JoinFunction(func, coefficients), x);
 
         public static double Calculate(LambdaExpression func, IEnumerable<double> coefficients, params double[] x)
             => Calculate(SplitAndCheckLambda(func), coefficients, x);
@@ -126,6 +135,16 @@ namespace Markovcd.Classes
             }
 
             return (a.Invert() * c).GetColumn();
+        }
+
+        protected static IReadOnlyList<double> GetCoefficients<T, TResult>(IReadOnlyList<LambdaExpression> func, IEnumerable<TResult> y, IEnumerable<IReadOnlyList<T>> x, IFormatProvider formatProvider = null)
+            where T : IConvertible
+            where TResult : IConvertible
+        {
+            formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
+            var x2 = x.Select(arr => arr.Select(item => item.ToDouble(formatProvider)).ToList()).ToArray();
+            var y2 = y.Select(item => item.ToDouble(formatProvider)).ToList();
+            return GetCoefficients(func, y2, x2);
         }
 
         private static LambdaExpression MultiplyLambdas(LambdaExpression func1, LambdaExpression func2)
