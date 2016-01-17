@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Markovcd.Classes
@@ -15,6 +16,9 @@ namespace Markovcd.Classes
         public Model(Expression<Func<T, TResult>> func, IReadOnlyList<TResult> y, IReadOnlyList<T> x, IFormatProvider formatProvider = null)
             : base(func, Convert(y, formatProvider), Convert(x, formatProvider))
         { }
+
+        public TResult CalculateFunction(T x1)
+            => CalculateFunction<TResult>(OutputFunction.Compile(), new object[] { x1 });
     }
 
     public sealed class Model<T1, T2, TResult> : Model<Func<T1, T2, TResult>>
@@ -26,6 +30,9 @@ namespace Markovcd.Classes
             IReadOnlyList<T2> x2, IFormatProvider formatProvider = null)
             : base(func, Convert(y, formatProvider), Convert(x1, formatProvider), Convert(x2, formatProvider))
         { }
+
+        public TResult CalculateFunction(T1 x1, T2 x2)
+            => CalculateFunction<TResult>(OutputFunction.Compile(), new object[] { x1, x2 });
     }
 
     public sealed class Model<T1, T2, T3, TResult> : Model<Func<T1, T2, T3, TResult>>
@@ -40,6 +47,9 @@ namespace Markovcd.Classes
                 func, Convert(y, formatProvider), Convert(x1, formatProvider), Convert(x2, formatProvider),
                 Convert(x3, formatProvider))
         { }
+
+        public TResult CalculateFunction(T1 x1, T2 x2, T3 x3) 
+            => CalculateFunction<TResult>(OutputFunction.Compile(), new object[] {x1, x2, x3});
     }
 
     public sealed class Model<T1, T2, T3, T4, TResult> : Model<Func<T1, T2, T3, T4, TResult>>
@@ -55,6 +65,9 @@ namespace Markovcd.Classes
                 func, Convert(y, formatProvider), Convert(x1, formatProvider), Convert(x2, formatProvider),
                 Convert(x3, formatProvider), Convert(x4, formatProvider))
         { }
+
+        public TResult CalculateFunction(T1 x1, T2 x2, T3 x3, T4 x4)
+            => CalculateFunction<TResult>(OutputFunction.Compile(), new object[] { x1, x2, x3, x4 });
     }
 
     public class Model<TFunc> : Model where TFunc : class

@@ -12,20 +12,8 @@ namespace Markovcd.Classes
     public class ModelBase
     {
        
-        private static double ResidualSumOfSquares(Delegate func, IEnumerable<double> y, params IReadOnlyList<double>[] x)
-        {
-            var types = func.Method.GetParameters().Skip(1).Select(p => p.ParameterType);
-            return
-                y.Select((t, i) => Math.Pow(t - CalculateFunction<double>(func, x.Select(p => (object)p[i]), types), 2))
-                    .Sum();
-        }
-
-        /*private static double TotalSumOfSquares<T>(IEnumerable<T> y, IFormatProvider formatProvider = null)
-            where T : IConvertible
-        {
-            formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-            return TotalSumOfSquares(y.Select(item => item.ToDouble(formatProvider)).ToList());
-        }*/
+        private static double ResidualSumOfSquares(Delegate func, IEnumerable<double> y, params IReadOnlyList<double>[] x) 
+            => y.Select((t, i) => Math.Pow(t - CalculateFunction<double>(func, x.Select(p => (object)p[i])), 2)).Sum();
 
         private static double TotalSumOfSquares(IReadOnlyCollection<double> y)
         {
@@ -36,9 +24,6 @@ namespace Markovcd.Classes
         public static double CalculateRSquared(Delegate func, IReadOnlyList<double> y, params IReadOnlyList<double>[] x)
             => 1 - ResidualSumOfSquares(func, y, x) / TotalSumOfSquares(y);
 
-        /*public static LambdaExpression JoinFunction(LambdaExpression func, IEnumerable<double> coefficients)
-            => JoinFunction(SplitAndCheckLambda(func), coefficients);*/
-
         public static LambdaExpression JoinFunction(IEnumerable<LambdaExpression> func, IEnumerable<double> coefficients)
             => func.Zip(coefficients, (f, d) =>
                        Expression.Lambda(
@@ -48,15 +33,6 @@ namespace Markovcd.Classes
                        Expression.Lambda(
                            Expression.Add(total.Body, curr.Body), total.Parameters));
 
-        /*public static double Calculate(Delegate func, params double[] x)
-            => (double)func.DynamicInvoke(x);
-
-        private static double Calculate(IEnumerable<LambdaExpression> func, IEnumerable<double> coefficients, params double[] x)
-            => Calculate(JoinFunction(func, coefficients), x);
-
-        public static double Calculate(LambdaExpression func, IEnumerable<double> coefficients, params double[] x)
-            => Calculate(SplitAndCheckLambda(func), coefficients, x);
-*/
         protected static IEnumerable<LambdaExpression> SplitAndCheckLambda(LambdaExpression func)
         {
             yield return Expression.Lambda(Expression.Constant(1d), func.Parameters);
@@ -95,20 +71,6 @@ namespace Markovcd.Classes
             }
         }
 
-        /*private static double SumOfFunction(LambdaExpression func, IReadOnlyList<double> y, params IReadOnlyList<double>[] x)
-        {
-            var sum = 0d;
-            var del = func.Compile();
-
-            for (var i = 0; i < y.Count; i++)
-            {
-                var args = x.Select(p => p[i]).ToArray();
-                sum += (double)del.DynamicInvoke(y[i], args);
-            }
-
-            return sum;
-        }*/
-
         private static object ConvertParameterValue(object value, Type type)
         {
             if (value is IConvertible)
@@ -117,12 +79,17 @@ namespace Markovcd.Classes
             return value;
         }
 
+        private static IEnumerable<Type> GetDelegateParameterTypes(Delegate d) 
+            => d.Method.GetParameters().Skip(1).Select(p => p.ParameterType);
+
         private static IEnumerable<object> ConvertParameterValues(IEnumerable<object> values,
             IEnumerable<Type> types) => values.Zip(types, ConvertParameterValue);
 
-        private static T CalculateFunction<T>(Delegate d, IEnumerable<object> arguments, IEnumerable<Type> types)
+        protected static T CalculateFunction<T>(Delegate d, IEnumerable<object> arguments)
         {
+            var types = GetDelegateParameterTypes(d);
             var args = ConvertParameterValues(arguments, types).ToArray();
+            
             return (T)d.DynamicInvoke(args);
         }
 
@@ -136,9 +103,7 @@ namespace Markovcd.Classes
             for (var i = 0; i < parameters[0].Count; i++)
             {
                 var args = parameters.Select(arr => arr[i]);
-                var types = func.Parameters.Select(p => p.Type);
-                //sum += (double)del.DynamicInvoke(args);
-                sum += CalculateFunction<double>(del, args, types);
+                sum += CalculateFunction<double>(del, args);
             }
 
             return sum;
