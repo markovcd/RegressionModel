@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using Markovcd.Interfaces;
 
 namespace Markovcd.Classes
-{
+{ // TODO: this token support
     public class UnaryOperatorToken : OperatorToken, IUnaryExpressionConstructor
     {
         public virtual Func<Expression, UnaryExpression> ConstructExpression { get; }   

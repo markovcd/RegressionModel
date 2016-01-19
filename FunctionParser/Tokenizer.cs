@@ -11,7 +11,7 @@ namespace Markovcd.Classes
 
         public string LastExpression { get; protected set; }
         public IEnumerable<Token> Rules => rules.Values;
-        public IEnumerable<ParameterToken> Parameters => rules.Values.Where(t => t is ParameterToken).Cast<ParameterToken>();
+        public IEnumerable<ParameterToken> Parameters => rules.Values.Where(t => t is ParameterToken).Cast<ParameterToken>().ToList();
         private readonly Dictionary<string, Token> rules;  
 
         public Tokenizer(IEnumerable<Token> rules, IEnumerable<ParameterToken> parameters = null)

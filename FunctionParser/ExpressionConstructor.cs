@@ -25,11 +25,8 @@ namespace Markovcd.Classes
         {
             var stack = new Stack<Expression>();
 
-            foreach (var token in postfix)
-            {
-                var expression = ConstructExpression(stack, token, parameters);
+            foreach (var expression in postfix.Select(token => ConstructExpression(stack, token, parameters)))
                 stack.Push(expression);
-            }
 
             var result = stack.Pop();
 

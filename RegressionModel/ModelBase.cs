@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Net.Http;
-using Markovcd.Classes;
 
 namespace Markovcd.Classes
 {
@@ -107,40 +103,7 @@ namespace Markovcd.Classes
             }
 
             return sum;
-        }
-        /*
-        private static double SumOfFunction(LambdaExpression func, params IReadOnlyList<double>[] x)
-        {
-            var sum = 0d;
-            var del = func.Compile();
-
-            for (var i = 0; i < x.First().Count; i++)
-            {
-                var args = x.Select(p => p[i]).ToArray();
-                sum += (double)del.DynamicInvoke(args);
-            }
-
-            return sum;
-        }
-        */
-        /*public static IReadOnlyList<double> GetCoefficients(LambdaExpression func, IReadOnlyList<object> y, params IReadOnlyList<object>[] x)
-            => GetCoefficients(SplitAndCheckLambda(func).ToList(), y, x);*/
-
-        /*protected static IReadOnlyList<double> GetCoefficients(IReadOnlyList<LambdaExpression> func, IReadOnlyList<double> y, params IReadOnlyList<double>[] x)
-        {
-            var c = new Matrix(func.Count);
-            var a = new Matrix(func.Count, func.Count);
-
-            for (var i = 0; i < a.Height; i++)
-            {
-                c[i] = SumOfFunction(MultiplyLambdaByY(func[i]), y, x);
-
-                for (var j = 0; j < a.Width; j++)
-                    a[i, j] = SumOfFunction(MultiplyLambdas(func[i], func[j]), x);
-            }
-
-            return (a.Invert() * c).GetColumn();
-        }*/
+        }        
 
         protected static IReadOnlyList<double> GetCoefficients(IReadOnlyList<LambdaExpression> func, IReadOnlyList<double> y, params IReadOnlyList<double>[] x)
         {

@@ -1,14 +1,12 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Markovcd.Classes
-{//todo: typesafe calculatefunction
+{
     public sealed class Model<T, TResult> : Model<Func<T, TResult>>
         where T : IComparable, IFormattable, IConvertible, IComparable<T>, IEquatable<T>
         where TResult : IComparable, IFormattable, IConvertible, IComparable<TResult>, IEquatable<TResult>
@@ -78,15 +76,9 @@ namespace Markovcd.Classes
         public Model(Expression<TFunc> func, IReadOnlyList<double> y, params IReadOnlyList<double>[] x)
             : base(func, y, x) { }
 
-        private static double Convert<T>(T value, IFormatProvider formatProvider = null)
-            where T : IConvertible
-        {
-            formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-            return value.ToDouble(formatProvider);
-        }
-
         protected static IReadOnlyList<TResult> Convert<T, TResult>(IReadOnlyList<T> values, IFormatProvider formatProvider = null)
-            where T : IConvertible => values.Select(value => (TResult)System.Convert.ChangeType(value, typeof(TResult))).ToList();
+            where T : IConvertible 
+            => values.Select(value => (TResult)System.Convert.ChangeType(value, typeof(TResult), formatProvider ?? CultureInfo.InvariantCulture)).ToList();
 
         protected static IReadOnlyList<double> Convert<T>(IReadOnlyList<T> values, IFormatProvider formatProvider = null)
             where T : IConvertible => Convert<T, double>(values, formatProvider);
@@ -120,9 +112,6 @@ namespace Markovcd.Classes
             OutputFunction = JoinFunction(splitFunction, Coefficients);
             RSquared = CalculateRSquared(OutputFunction.Compile(), y, x);
         }
-
-        /*public double Calculate(params double[] x) 
-            => Calculate(OutputParamsFunction, x);*/
 
         private static string TrimParentheses(string func)
         {
@@ -170,13 +159,8 @@ namespace Markovcd.Classes
 
         private static void Assert(Type type)
         {
-            //var doubl = typeof(double);
-
             if (!type.IsSubclassOf(typeof(Delegate)) || !type.Name.Contains("Func`"))
                 throw new InvalidOperationException(type.Name + " is not a Func<> type");
-
-            /*if (type.GetGenericArguments().Any(t => !t.Equals(doubl)))
-                throw new ArgumentException("Generic arguments should be of type double.");*/
         }
 
         public static Model<T, TResult> Create<T, TResult>(Expression<Func<T, TResult>> func,
