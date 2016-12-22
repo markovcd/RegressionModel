@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Markovcd.Classes
@@ -122,37 +123,68 @@ namespace Markovcd.Classes
             return func;
         }
 
-        public override string ToString()
+        public FunctionStringClass FunctionString => new FunctionStringClass(this);
+
+        public sealed class FunctionStringClass
         {
-            var parameters = InputFunction.Parameters.Select(p => p.Name).Aggregate((s1, s2) => $"{s1}, {s2}");
+            private readonly Model parent;
 
-            var terms = splitFunction.Select(f => f.Body.ToString())
-                                     .Select(TrimParentheses)
-                                     .Select(s => new string(s.Where(c => !char.IsWhiteSpace(c)).ToArray()))
-                                     .ToArray();
+            internal FunctionStringClass(Model parent)
+            {
+                this.parent = parent;
+            }
 
+            private string Parameters
+                => parent.InputFunction.Parameters.Select(p => p.Name).Aggregate((s1, s2) => $"{s1}, {s2}");
 
-            var coeffs = Coefficients.Select((d, i) => $"b{i + 1} = {d}").Aggregate((s1, s2) => $"{s1}\n{s2}");
-            var b = Coefficients.Select((d, i) => $"b{i + 1}"); 
+            private string[] Terms
+                => parent.splitFunction.Select(f => f.Body.ToString())
+                                       .Select(TrimParentheses)
+                                       .Select(s => new string(s.Where(c => !char.IsWhiteSpace(c)).ToArray()))
+                                       .ToArray();
 
-            var originalFunc = terms.Zip(b, (s, d) => s.Equals("1") ? $"{d}" : $"{d}*{s}")
+            public string Parametrized 
+            {
+                get
+                {
+                    var b = parent.Coefficients.Select((d, i) => $"b{i + 1}");
+
+                    var originalFunc = Terms.Zip(b, (s, d) => s.Equals("1") ? $"{d}" : $"{d}*{s}")
                                     .Aggregate((s1, s2) => $"{s1} + {s2}");
 
-            var func = terms.Zip(Coefficients, (s, d) => s.Equals("1") ? $"{d:0.000}" : $"{d:0.000}*{s}")
+                    return $"f({Parameters}) = {originalFunc}";
+                }
+            }
+
+            public string Final
+            {
+                get
+                {
+                    var func = Terms.Zip(parent.Coefficients, (s, d) => s.Equals("1") ? $"{d:0.000}" : $"{d:0.000}*{s}")
                             .Aggregate((s1, s2) => $"{s1} + {s2}");
 
+                    return $"f({Parameters}) = {func}";
+                }
+            }
+
+            public string Coefficients
+                => parent.Coefficients.Select((d, i) => $"b{i + 1} = {d}").Aggregate((s1, s2) => $"{s1}\n{s2}");
+        }
+
+        public override string ToString()
+        {
             var sb = new StringBuilder();
 
             sb.AppendLine("Given function:");
-            sb.AppendLine($"f({parameters}) = {originalFunc}");
+            sb.AppendLine(FunctionString.Parametrized);
             sb.AppendLine();
             sb.AppendLine("Coefficients:");
-            sb.AppendLine(coeffs);
+            sb.AppendLine(FunctionString.Coefficients);
             sb.AppendLine();
             sb.AppendLine($"R squared: {RSquared}");
             sb.AppendLine();
             sb.AppendLine("Resulting function:");
-            sb.Append($"f({parameters}) = {func}");
+            sb.Append(FunctionString.Final);
 
             return sb.ToString();
         }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Excel = Microsoft.Office.Interop.Excel;
 
-namespace RegressionModel
+namespace Markovcd.Classes
 {
     abstract public class ExcelBase : IDisposable
     {
@@ -25,6 +25,9 @@ namespace RegressionModel
 
         protected Excel.Range GetRange(string sheetname, string address)
             => GetSheet(sheetname).Range[address];
+
+        protected Excel.Range GetRange(string sheetname, int row, int column)
+            => GetSheet(sheetname).Cells[row, column];
     }
 
     

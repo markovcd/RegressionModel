@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegressionModel", "RegressionModel.csproj", "{80E6F600-E0C5-492A-8AE3-D3BB8EFB017E}"
 EndProject
@@ -10,6 +10,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomaticTest", "..\AutomaticTest\AutomaticTest.csproj", "{068E05CD-8790-452A-ABFB-F3620EC44F84}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionParser", "..\FunctionParser\FunctionParser.csproj", "{978097B6-A67D-4D2A-A369-EFD5D7FA0CE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interface", "..\Interface\Interface.csproj", "{DF33F8CF-8039-42BE-A239-22F079DCC624}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelAddin", "..\ExcelAddin\ExcelAddin.csproj", "{7405B8CA-EAE6-46B2-9420-EC66FA4014E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{978097B6-A67D-4D2A-A369-EFD5D7FA0CE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{978097B6-A67D-4D2A-A369-EFD5D7FA0CE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{978097B6-A67D-4D2A-A369-EFD5D7FA0CE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF33F8CF-8039-42BE-A239-22F079DCC624}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF33F8CF-8039-42BE-A239-22F079DCC624}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF33F8CF-8039-42BE-A239-22F079DCC624}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF33F8CF-8039-42BE-A239-22F079DCC624}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7405B8CA-EAE6-46B2-9420-EC66FA4014E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7405B8CA-EAE6-46B2-9420-EC66FA4014E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7405B8CA-EAE6-46B2-9420-EC66FA4014E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7405B8CA-EAE6-46B2-9420-EC66FA4014E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

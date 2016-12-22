@@ -34,15 +34,14 @@ namespace Markovcd
             };
             
             
-            //var funcStr = "f(x1, x2) = x1 + x2 + x1^2 + x2^2 + x1*x2 + Sin(x1)";
+            var funcStr = "f(x1, x2) = x1 + x2 + x1^2 + x2^2 + x1*x2 + Sin(x1)";
             //var model = new ModelParser(funcStr, y, p1, p2);
-            var model = 
-                Model.Create((x1, x2) => x1 + x2 + x1*x1 + x2*x2 + x1*x2 , y,
-                    p1, p2);
+            //var model = Model.Create((x1, x2) => x1 + x2 + x1*x1 + x2*x2 + x1*x2 , y, p1, p2);
+            var filename = @"C:\Users\Arek\Desktop\aproksymacja 3d.xlsx";
+            //var model = new ExcelModel(filename, "dane", funcStr, "A2:A122", "B2:C122");
+            //model.WriteResults("dane", "J10");
+            //model.Dispose();
 
-             Console.WriteLine(model);
-
-            Console.ReadLine();
 
          
         }

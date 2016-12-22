@@ -107,6 +107,8 @@ namespace Markovcd.Classes
 
         protected static IReadOnlyList<double> GetCoefficients(IReadOnlyList<LambdaExpression> func, IReadOnlyList<double> y, params IReadOnlyList<double>[] x)
         {
+            if (x.Any(l => l.Count != y.Count)) throw new Exception("Array lengths must be equal.");
+
             var c = new Matrix(func.Count);
             var a = new Matrix(func.Count, func.Count);
             var yType = y.GetType().GenericTypeArguments.First();
